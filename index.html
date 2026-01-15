@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kaalix Security</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background: #0b0f1a; font-family: sans-serif; overflow: hidden; color: white; }
+        .glass-card { 
+            background: rgba(22, 30, 46, 0.95); 
+            backdrop-filter: blur(25px); 
+            border: 1px solid rgba(255,255,255,0.05); 
+            border-radius: 32px;
+        }
+        .neon-loader {
+            width: 70px; height: 70px;
+            border: 4px solid rgba(6, 182, 212, 0.1);
+            border-top: 4px solid #06b6d4;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen">
+
+    <div id="loader" class="text-center">
+        <div class="flex justify-center mb-6">
+            <div class="neon-loader"></div>
+        </div>
+        <h1 class="text-2xl font-bold tracking-tighter">KAALIX <span class="text-cyan-400">ULTRA</span></h1>
+        <p class="text-slate-500 text-[10px] mt-2 uppercase tracking-widest">Connecting to Server...</p>
+    </div>
+
+    <div id="problem-box" class="hidden glass-card p-10 w-[90%] max-w-sm text-center">
+        <div class="w-16 h-16 bg-rose-500/10 rounded-full flex items-center justify-center mx-auto mb-6 border border-rose-500/20">
+            <svg class="w-8 h-8 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+            </svg>
+        </div>
+        <h2 id="title" class="text-xl font-bold mb-4 text-white"></h2>
+        <p id="desc" class="text-slate-400 text-sm mb-6"></p>
+        <div class="text-[10px] text-cyan-400 font-bold uppercase tracking-widest">Please Try Again Later</div>
+    </div>
+
+    <script>
+        const PASTEBIN_RAW = "https://pastebin.com/raw/bAwehKbB";
+
+        async function startSystem() {
+            try {
+                const response = await fetch(PASTEBIN_RAW);
+                const config = await response.json();
+
+                // 2 Seconds loading
+                setTimeout(() => {
+                    document.getElementById('loader').classList.add('hidden');
+
+                    if (config.update_available === true) {
+                        // Agar Pastebin me true hai toh Problem show karo
+                        document.getElementById('problem-box').classList.remove('hidden');
+                        document.getElementById('title').innerText = config.dialog_title;
+                        document.getElementById('desc').innerText = config.dialog_msg;
+                    } else {
+                        // Agar false hai toh automatic link open karo
+                        window.location.href = config.redirect_url;
+                    }
+                }, 2000);
+
+            } catch (e) {
+                document.getElementById('loader').innerHTML = "<p class='text-rose-500'>Server Connection Error</p>";
+            }
+        }
+
+        startSystem();
+    </script>
+</body>
+</html>
+
