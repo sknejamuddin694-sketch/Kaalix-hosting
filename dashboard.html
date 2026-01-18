@@ -1,0 +1,187 @@
+
+<div class="max-w-6xl mx-auto p-4 md:p-12 min-h-screen">
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-6">
+        <div class="space-y-1">
+            <h2 class="text-5xl font-black text-white tracking-tighter italic">
+                KAALIX <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">HOSTING </span>
+            </h2>
+            <div class="flex items-center gap-3">
+                <div class="flex items-center gap-1.5 bg-slate-800/50 px-3 py-1 rounded-full border border-white/5">
+                    <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                    <span class="text-slate-400 text-[10px] font-bold uppercase tracking-[0.2em]">{{uid}}</span>
+                </div>
+            </div>
+        </div>
+        <div class="flex gap-3 w-full md:w-auto">
+            <a href="/logout" class="flex-1 md:flex-none text-center px-8 py-3 rounded-2xl bg-white/5 border border-white/10 text-white hover:bg-rose-500/20 hover:border-rose-500/50 transition-all duration-300 text-sm font-bold">
+                Sign Out
+            </a>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-10">
+        <div class="relative group overflow-hidden bg-slate-900/40 backdrop-blur-xl p-8 rounded-[2.5rem] border border-white/5 hover:border-cyan-500/30 transition-all duration-500">
+            <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                <svg class="w-20 h-20 text-cyan-400" fill="currentColor" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+            </div>
+            <p class="text-slate-500 text-xs font-black uppercase tracking-widest">Active Engines</p>
+            <h4 class="text-5xl font-black text-white mt-3 flex items-baseline gap-2">
+                {% set count = namespace(value=0) %}{% for b, s in bots.items() %}{% if s == 'RUNNING' %}{% set count.value = count.value + 1 %}{% endif %}{% endfor %}{{ count.value }}
+                <span class="text-sm font-medium text-cyan-500/60 tracking-normal">Running Now</span>
+            </h4>
+        </div>
+
+        <div class="bg-slate-900/40 backdrop-blur-xl p-8 rounded-[2.5rem] border border-white/5">
+            <p class="text-slate-500 text-xs font-black uppercase tracking-widest">Resource Usage</p>
+            <h4 class="text-5xl font-black text-white mt-3">{{ bots|length }}<span class="text-2xl text-slate-700">/3</span></h4>
+            <div class="w-full bg-slate-800 h-1.5 mt-4 rounded-full overflow-hidden">
+                <div class="bg-cyan-500 h-full transition-all duration-1000" style="width: {{ (bots|length / 3) * 100 }}%"></div>
+            </div>
+        </div>
+
+        <div class="bg-gradient-to-br from-emerald-500/10 to-transparent backdrop-blur-xl p-8 rounded-[2.5rem] border border-emerald-500/20">
+            <p class="text-emerald-500/70 text-xs font-black uppercase tracking-widest">Server Latency</p>
+            <h4 class="text-5xl font-black text-emerald-400 mt-3">ONLINE<span class="text-xl">📟</span></h4>
+            <p class="text-emerald-500/50 text-[10px] mt-2 font-bold uppercase">Optimal Performance</p>
+        </div>
+    </div>
+
+    <div class="bg-slate-900/40 backdrop-blur-2xl rounded-[3rem] border border-white/5 shadow-3xl overflow-hidden mb-10">
+        <div class="px-10 py-8 border-b border-white/5 flex justify-between items-center bg-white/[0.02]">
+            <h3 class="font-black text-2xl tracking-tight">Active Projects</h3>
+            <span class="bg-cyan-500/10 text-cyan-400 text-[10px] font-black px-4 py-1.5 rounded-full border border-cyan-500/20 uppercase tracking-widest">Live Updates</span>
+        </div>
+        
+        <div class="p-6 md:p-10">
+            {% if bots %}
+                <div class="grid gap-4">
+                {% for bot, status in bots.items() %}
+                <div class="group flex flex-col md:flex-row items-center justify-between p-6 bg-slate-800/30 rounded-[2rem] border border-white/5 hover:bg-slate-800/60 hover:scale-[1.01] transition-all duration-300">
+                    <div class="flex items-center gap-6 mb-6 md:mb-0 w-full md:w-auto">
+                        <div class="relative">
+                            <div class="w-14 h-14 rounded-2xl bg-slate-900 flex items-center justify-center border border-white/10 group-hover:border-cyan-500/50 transition-colors">
+                                <svg class="w-6 h-6 {% if status=='RUNNING' %}text-cyan-400 animate-bot{% else %}text-slate-600{% endif %}"
+     fill="none"
+     stroke="currentColor"
+     viewBox="0 0 24 24">
+
+  <!-- Antenna -->
+  <line x1="12" y1="2" x2="12" y2="5" stroke-width="2">
+    <animate attributeName="opacity"
+             values="1;0.2;1"
+             dur="1s"
+             repeatCount="indefinite"
+             {% if status!='RUNNING' %}begin="indefinite"{% endif %}/>
+  </line>
+
+  <!-- Head -->
+  <rect x="5" y="6" width="14" height="10" rx="2" stroke-width="2">
+    <animateTransform attributeName="transform"
+      type="translate"
+      values="0 0; 0 -0.5; 0 0"
+      dur="1s"
+      repeatCount="indefinite"
+      {% if status!='RUNNING' %}begin="indefinite"{% endif %}/>
+  </rect>
+
+  <!-- Eyes -->
+  <circle cx="9" cy="11" r="1" fill="currentColor">
+    <animate attributeName="r"
+             values="1;0.3;1"
+             dur="1.2s"
+             repeatCount="indefinite"
+             {% if status!='RUNNING' %}begin="indefinite"{% endif %}/>
+  </circle>
+
+  <circle cx="15" cy="11" r="1" fill="currentColor">
+    <animate attributeName="r"
+             values="1;0.3;1"
+             dur="1.2s"
+             repeatCount="indefinite"
+             {% if status!='RUNNING' %}begin="indefinite"{% endif %}/>
+  </circle>
+
+  <!-- Body -->
+  <line x1="12" y1="16" x2="12" y2="21" stroke-width="2"/>
+
+  <!-- Hands -->
+  <line x1="5" y1="14" x2="2" y2="16" stroke-width="2">
+    <animateTransform attributeName="transform"
+      type="rotate"
+      values="0 5 14; 10 5 14; 0 5 14"
+      dur="1s"
+      repeatCount="indefinite"
+      {% if status!='RUNNING' %}begin="indefinite"{% endif %}/>
+  </line>
+
+  <line x1="19" y1="14" x2="22" y2="16" stroke-width="2">
+    <animateTransform attributeName="transform"
+      type="rotate"
+      values="0 19 14; -10 19 14; 0 19 14"
+      dur="1s"
+      repeatCount="indefinite"
+      {% if status!='RUNNING' %}begin="indefinite"{% endif %}/>
+  </line>
+
+</svg>
+                            </div>
+                            {% if status=='RUNNING' %}
+                                <span class="absolute -top-1 -right-1 w-4 h-4 bg-green-500 border-4 border-slate-900 rounded-full"></span>
+                            {% endif %}
+                        </div>
+                        <div class="overflow-hidden">
+                            <span class="font-bold text-lg text-slate-100 block truncate">{{bot}}</span>
+                            <div class="flex items-center gap-2">
+                                <span class="text-[10px] uppercase font-black tracking-tighter {% if status=='RUNNING' %}text-emerald-400{% else %}text-slate-500{% endif %}">{{status}}</span>
+                                <span class="text-slate-600 text-[10px]">•</span>
+                                <span class="text-slate-600 text-[10px] uppercase font-bold">Instance #{{ loop.index }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex gap-3 w-full md:w-auto">
+                        {% if status=='STOPPED' %}
+                            <a href='/startbot/{{bot}}' class="flex-1 text-center bg-cyan-500 hover:bg-cyan-400 text-slate-950 px-8 py-3 rounded-xl text-xs font-black transition-all transform active:scale-95 shadow-lg shadow-cyan-500/20">RESUME</a>
+                        {% else %}
+                            <a href='/stopbot/{{bot}}' class="flex-1 text-center bg-white/5 hover:bg-rose-500 text-white px-8 py-3 rounded-xl text-xs font-black transition-all transform active:scale-95">TERMINATE</a>
+                        {% endif %}
+                        <a href='/editbot/{{bot}}' class="flex-1 text-center bg-slate-700/50 hover:bg-slate-600 text-white px-8 py-3 rounded-xl text-xs font-black transition-all">CONFIG</a>
+                    </div>
+                </div>
+                {% endfor %}
+                </div>
+            {% else %}
+                <div class="text-center py-20 bg-slate-800/20 rounded-[2rem] border-2 border-dashed border-white/5">
+                    <div class="w-20 h-20 bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <svg class="w-10 h-10 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+                    </div>
+                    <p class="text-slate-400 font-bold uppercase tracking-widest text-sm">No Active Deployments</p>
+                    <p class="text-slate-600 text-xs mt-1">Upload your script below to get started.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="bg-gradient-to-r from-cyan-600/20 to-blue-600/20 p-1 md:p-1 rounded-[3.5rem]">
+        <div class="bg-slate-950 p-8 md:p-12 rounded-[3.2rem]">
+            <div class="flex flex-col lg:flex-row items-center gap-10">
+                <div class="flex-1 text-center lg:text-left">
+                    <h3 class="text-3xl font-black mb-3">Deploy New Bot</h3>
+                    <p class="text-slate-400 font-medium max-w-sm">Drag and drop your <span class="text-cyan-400">.py</span> or <span class="text-cyan-400">.zip</span> package here for instant deployment.</p>
+                </div>
+                <form method='post' action='/upload' enctype='multipart/form-data' class="w-full lg:w-auto flex flex-col md:flex-row gap-4">
+                    <div class="relative group">
+                        <input type='file' name='botfile' required class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
+                        <div class="bg-slate-900 border-2 border-dashed border-slate-700 group-hover:border-cyan-500/50 px-8 py-4 rounded-2xl transition-all flex items-center gap-4">
+                            <svg class="w-5 h-5 text-slate-500 group-hover:text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
+                            <span class="text-slate-400 group-hover:text-white text-sm font-bold">Choose System File</span>
+                        </div>
+                    </div>
+                    <button class='bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-black px-12 py-5 rounded-2xl transition-all shadow-2xl shadow-cyan-500/20 transform active:scale-95 uppercase tracking-widest text-sm'>
+                        UPLOAD
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
